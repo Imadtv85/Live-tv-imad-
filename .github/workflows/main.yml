@@ -1,4 +1,4 @@
-name: Facebook Live Streaming in 1080p
+name: Facebook Live Streaming with FFmpeg
 
 on:
   push:
@@ -18,22 +18,22 @@ jobs:
         sudo apt update
         sudo apt install -y ffmpeg
 
-    - name: Run FFmpeg for 1080p Facebook Streaming
+    - name: Run FFmpeg for Facebook Live in background
       run: |
         m3u8_link="https://live4.beinconnect.us/YallaGoalApp/beINSports1.m3u8"
         stream_key="FB-559223543515839-0-AbyS-GVN_fkHZNZV"
         output_url="rtmps://live-api-s.facebook.com:443/rtmp/$stream_key"
         
-        # إعدادات بث 1080p
-        ffmpeg -i "$m3u8_link" \
+        # تشغيل FFmpeg في الخلفية باستخدام nohup
+        nohup ffmpeg -i "$m3u8_link" \
           -c:v libx264 \
           -preset fast \
-          -b:v 3000k \  # تحديد معدل البت للبث بدقة 1080p
-          -maxrate 3000k \  # تحديد أقصى معدل للبت
-          -bufsize 6000k \  # تحديد حجم المخزن المؤقت (buffer size)
-          -s 1920x1080 \  # تعيين الدقة إلى 1080p (1920x1080)
+          -b:v 3000k \  # معدل البت 3000k (دقة 1080p)
+          -maxrate 3000k \  # الحد الأقصى لمعدل البت
+          -bufsize 6000k \  # حجم المخزن المؤقت (Buffer Size)
+          -s 1920x1080 \  # دقة 1080p
           -c:a aac \
-          -b:a 128k \  # إعدادات الصوت
-          -f flv "$output_url" &  # تحديد بروتوكول الفيدو RTMP لإرسال البث إلى فيسبوك
-
-        echo "1080p Streaming started..."
+          -b:a 128k \  # معدل بت الصوت
+          -f flv "$output_url" &  # بروتوكول RTMP لإرسال البث إلى فيسبوك
+          
+        echo "Streaming started to Facebook in 1080p..."
