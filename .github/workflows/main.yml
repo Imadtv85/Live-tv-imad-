@@ -1,4 +1,4 @@
-name: Facebook Live Streaming with FFmpeg
+name: Live Stream to Facebook
 
 on:
   push:
@@ -10,30 +10,27 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v3
+      - name: Checkout Repository
+        uses: actions/checkout@v3
 
-    - name: Install FFmpeg
-      run: |
-        sudo apt update
-        sudo apt install -y ffmpeg
+      - name: Install FFmpeg
+        run: |
+          sudo apt update
+          sudo apt install -y ffmpeg
 
-    - name: Run FFmpeg for Facebook Live in background
-      run: |
-        m3u8_link="https://live4.beinconnect.us/YallaGoalApp/beINSports1.m3u8"
-        stream_key="FB-559223543515839-0-AbyS-GVN_fkHZNZV"
-        output_url="rtmps://live-api-s.facebook.com:443/rtmp/$stream_key"
-        
-        # تشغيل FFmpeg في الخلفية باستخدام nohup
-        nohup ffmpeg -i "$m3u8_link" \
-          -c:v libx264 \
-          -preset fast \
-          -b:v 3000k \  # معدل البت 3000k (دقة 1080p)
-          -maxrate 3000k \  # الحد الأقصى لمعدل البت
-          -bufsize 6000k \  # حجم المخزن المؤقت (Buffer Size)
-          -s 1920x1080 \  # دقة 1080p
-          -c:a aac \
-          -b:a 128k \  # معدل بت الصوت
-          -f flv "$output_url" &  # بروتوكول RTMP لإرسال البث إلى فيسبوك
+      - name: Start Live Stream
+        run: |
+          m3u8_link="https://live4.beinconnect.us/YallaGoalApp/beINSports1.m3u8"
+          stream_key="FB-559223543515839-0-AbyS-GVN_fkHZNZV"
+          output_url="rtmps://live-api-s.facebook.com:443/rtmp/$stream_key"
           
-        echo "Streaming started to Facebook in 1080p..."
+          ffmpeg -i "$m3u8_link" \
+            -c:v libx264 \
+            -preset fast \
+            -b:v 3000k \  # 1080p Bitrate
+            -maxrate 3000k \
+            -bufsize 6000k \
+            -s 1920x1080 \  # 1080p Resolution
+            -c:a aac \
+            -b:a 128k \  # Audio Bitrate
+            -f flv "$output_url"  # RTMP Output to Facebook
