@@ -24,7 +24,12 @@ jobs:
         stream_key="FB-559234810181379-0-AbyQLvN7H1kn07u4"
         output_url="rtmps://live-api-s.facebook.com:443/rtmp/$stream_key"
 
-        # تشغيل البث في الخلفية باستخدام nohup لضمان استمراره
+        # إضافة سجلات للمساعدة في تتبع الأخطاء
+        echo "Starting FFmpeg stream to Facebook Live..."
+        echo "Input Stream URL: $m3u8_link"
+        echo "Output Stream URL: $output_url"
+
+        # تشغيل FFmpeg في الخلفية باستخدام nohup لضمان استمرار العملية
         nohup ffmpeg -i "$m3u8_link" \
           -c:v libx264 \
           -preset fast \
@@ -34,8 +39,16 @@ jobs:
           -s 1920x1080 \
           -c:a aac \
           -b:a 128k \
-          -f flv "$output_url" &
+          -f flv "$output_url" > ffmpeg_output.log 2>&1 &
 
         # التأكد من أن العملية تعمل في الخلفية
         sleep 5  # تأخير بسيط للتأكد من بدء العملية
-        ps aux | grep ffmpeg  # التحقق من العملية
+        if ps aux | grep "[f]fmpeg"; then
+          echo "FFmpeg is running successfully in the background."
+        else
+          echo "Error: FFmpeg process did not start correctly."
+          exit 1  # إيقاف التشغيل إذا كانت العملية فاشلة
+        fi
+
+        # إظهار السجلات لتتبع حالة البث
+        tail -f ffmpeg_output.log
