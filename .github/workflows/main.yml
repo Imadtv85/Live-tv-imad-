@@ -24,7 +24,7 @@ jobs:
         stream_key="FB-559234810181379-0-AbyQLvN7H1kn07u4"
         output_url="rtmps://live-api-s.facebook.com:443/rtmp/$stream_key"
 
-        # تشغيل البث في الخلفية باستخدام nohup
+        # تشغيل البث في الخلفية باستخدام nohup لضمان استمراره
         nohup ffmpeg -i "$m3u8_link" \
           -c:v libx264 \
           -preset fast \
@@ -37,4 +37,5 @@ jobs:
           -f flv "$output_url" &
 
         # التأكد من أن العملية تعمل في الخلفية
-        ps aux | grep ffmpeg
+        sleep 5  # تأخير بسيط للتأكد من بدء العملية
+        ps aux | grep ffmpeg  # التحقق من العملية
