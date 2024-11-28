@@ -1,4 +1,4 @@
-rtname: Continuous FFmpeg Stream to Facebook Live
+rtname: Continuous FFmpeg Stream to Facebook iLive
 
 on:
   push:
