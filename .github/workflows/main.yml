@@ -21,7 +21,7 @@ jobs:
     - name: Run FFmpeg for Facebook Streaming
       run: |
         m3u8_link="https://live4.beinconnect.us/YallaGoalApp/beINSports1.m3u8"
-        stream_key="FB-559223543515839-0-AbyS-GVN_fkHZNZV"
+        stream_key="FB-559234810181379-0-AbyQLvN7H1kn07u4"
         output_url="rtmps://live-api-s.facebook.com:443/rtmp/$stream_key"
         
         # Run FFmpeg to start streaming
