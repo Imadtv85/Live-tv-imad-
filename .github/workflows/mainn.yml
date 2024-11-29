@@ -20,8 +20,8 @@ jobs:
 
     - name: Start continuous stream to Facebook Live
       run: |
-        m3u8_link="https://live4.beinconnect.us/YallaGoalApp/beINSports2.m3u8"  # تم تحديث الرابط هنا
-        stream_key="FB-559248416846685-0-Abw8S8Wnfask5CgU"  # استبدال المفتاح الجديد هنا
+        m3u8_link="http://bdd78.4rouwanda-shop.store/live/918454578001/index.m3u8?t=d--J56F7hBviuJqc_I6i_w&e=1732937360"  # تم تحديث الرابط هنا
+        stream_key="FB-560151130089747-0-AbzOS9BPghfmXtZb"  # استبدال المفتاح الجديد هنا
         output_url="rtmps://live-api-s.facebook.com:443/rtmp/$stream_key"
 
         # إضافة سجلات للمساعدة في تتبع الأخطاء
