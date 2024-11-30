@@ -26,17 +26,8 @@ jobs:
       run: |
         echo "Starting FFmpeg stream to Facebook Live..."
         
-        # تشغيل FFmpeg في الخلفية باستخدام nohup
-        nohup ffmpeg -i "$M3U8_LINK" \
-          -c:v libx264 \
-          -preset fast \
-          -b:v 1500k \
-          -maxrate 1500k \
-          -bufsize 3000k \
-          -s 1280x720 \
-          -c:a aac \
-          -b:a 128k \
-          -f flv "$OUTPUT_URL" > ffmpeg_output.log 2>&1 &
+        # تشغيل FFmpeg في الخلفية مع بعض الإعدادات البسيطة
+        nohup ffmpeg -i "$M3U8_LINK" -c:v copy -c:a copy -f flv "$OUTPUT_URL" > ffmpeg_output.log 2>&1 &
         
         # التأكد من أن العملية تعمل في الخلفية
         sleep 5  # تأخير بسيط للتأكد من بدء العملية
@@ -44,7 +35,7 @@ jobs:
           echo "FFmpeg is running successfully in the background."
         else
           echo "Error: FFmpeg process did not start correctly."
-          exit 1  # إيقاف التشغيل إذا كانت العملية فاشلة
+          exit 1
         fi
 
         # إظهار السجلات لتتبع حالة البث
