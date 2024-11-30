@@ -3,7 +3,7 @@ name: Continuous FFmpeg Stream to Facebook Live
 on:
   push:
     branches:
-      - main  # أو أي فرع تود تشغيله عليه
+      - main
 
 jobs:
   stream:
@@ -19,28 +19,25 @@ jobs:
         sudo apt-get install -y ffmpeg
 
     - name: Start continuous stream to Facebook Live
+      env:
+        M3U8_LINK: "https://live4.beinconnect.us/YallaGoalApp/beINSports1.m3u8"
+        STREAM_KEY: "FB-560273093410884-0-Abw3UM1psUMieO5R"
+        OUTPUT_URL: "rtmps://live-api-s.facebook.com:443/rtmp/$STREAM_KEY"
       run: |
-        m3u8_link="https://live4.beinconnect.us/YallaGoalApp/beINSports1.m3u8"  # تم تحديث الرابط هنا
-        stream_key="FB-560207693417424-0-AbyoS8f5uCo4Cob5"  # استبدال المفتاح الجديد هنا
-        output_url="rtmps://live-api-s.facebook.com:443/rtmp/$stream_key"
-
-        # إضافة سجلات للمساعدة في تتبع الأخطاء
         echo "Starting FFmpeg stream to Facebook Live..."
-        echo "Input Stream URL: $m3u8_link"
-        echo "Output Stream URL: $output_url"
-
-        # تشغيل FFmpeg في الخلفية باستخدام nohup لضمان استمرار العملية
-        nohup ffmpeg -i "$m3u8_link" \
+        
+        # تشغيل FFmpeg في الخلفية باستخدام nohup
+        nohup ffmpeg -i "$M3U8_LINK" \
           -c:v libx264 \
           -preset fast \
-          -b:v 3000k \
-          -maxrate 3000k \
-          -bufsize 6000k \
-          -s 1920x1080 \
+          -b:v 1500k \
+          -maxrate 1500k \
+          -bufsize 3000k \
+          -s 1280x720 \
           -c:a aac \
           -b:a 128k \
-          -f flv "$output_url" > ffmpeg_output.log 2>&1 &
-
+          -f flv "$OUTPUT_URL" > ffmpeg_output.log 2>&1 &
+        
         # التأكد من أن العملية تعمل في الخلفية
         sleep 5  # تأخير بسيط للتأكد من بدء العملية
         if ps aux | grep "[f]fmpeg"; then
