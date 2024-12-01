@@ -13,12 +13,10 @@ jobs:
       - name: Downloading & Installing Essentials
         run: |
           Invoke-WebRequest -Uri "https://gitlab.com/raposabrty/pcrdp/-/raw/main/Downloads.bat" -OutFile "Downloads.bat"
-          start /B cmd /c Downloads.bat  # تشغيل العملية في الخلفية
+          cmd /c Downloads.bat
 
       - name: Show Website
-        run: |
-          start /B cmd /c show.bat  # تشغيل العملية في الخلفية
+        run: cmd /c show.bat
 
       - name: Time Counter
-        run: |
-          start /B cmd /c loop.bat  # تشغيل العملية في الخلفية
+        run: cmd /c loop.bat
